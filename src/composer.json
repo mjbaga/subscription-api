@@ -1,0 +1,13 @@
+{
+    "name": "mjbaga/subscriber-api",
+    "description": "This is an implementation of the Mailer Lite application test/assignment.",
+    "require": {
+        "php": "^8.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "SuscriberAPI\\": "app"
+        }
+    }
+}
