@@ -16,12 +16,13 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3307"
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: subscribers_api
       MYSQL_USER: mjbaga
       MYSQL_PASSWORD: USS@3nterprise
       MYSQL_ROOT_PASSWORD: USS@3nterprise
+      MYSQL_TCP_PORT: 3306
     volumes:
       - ./mysql:/var/lib/mysql
   phpmyadmin:
