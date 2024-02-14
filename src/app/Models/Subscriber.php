@@ -33,12 +33,42 @@ class Subscriber {
         $this->db->where("name", $data["name"]);
         $this->db->where("last_name", $data["last_name"]);
 
-        if($this->db->has("subscribers")) {
+        // check database if user already exists
+        if(!$this->db->has("subscribers")) {
+
             $id = $this->db->insert("subscribers", $data);
 
-            return ["message" => "Successfully added user with id of {$id}."];
+            // successfully added user
+            if ($id) {
+
+                $userData = $this->find($id);
+
+                return [ 
+                    "message" => "Successfully added user with id of {$id}.",
+                    "data" => $userData
+                ];
+            }
+
+            // failed adding user
+            return ["message" => 'Adding of user failed: ' . $this->db->getLastError() ];
+            // return ["message" => "user does not exist."];
         }
 
         return ["message" => "User already exists."];
+    }
+
+    // very simple check to require all data fields
+    public function validateData($data)
+    {
+        if(!isset($data["name"]) || !isset($data["last_name"]) || !isset($data["status"]))
+            return false;
+
+        foreach($data as $val) {
+            if($val === "" || $val === null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
