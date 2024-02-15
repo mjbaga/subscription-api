@@ -2,9 +2,13 @@
 
 require_once './vendor/autoload.php';
 
-$redis = new Redis();
-$redis->connect('redis-server', 6379);
+$client = new Predis\Client([
+    'scheme' => 'tcp',
+    'host'   => 'cache',
+    'port'   => 6379,
+]);
 
-echo "Connection to server successfully <br>";
+$client->set('foo', 'bar');
+$value = $client->get('foo');
 
-echo "Server is running: " . $redis->ping() . "<br>";
+echo $value;

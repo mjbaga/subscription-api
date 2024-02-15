@@ -2,6 +2,9 @@ services:
   site:
     image: nginx:stable-alpine
     container_name: nginx
+    build:
+      context: .
+      dockerfile: redis.dockerfile
     ports:
       - "80:80"
     volumes:
@@ -10,6 +13,7 @@ services:
     depends_on:
       - php
       - mysql
+      - cache
   mysql:
     image: mysql:5.7
     container_name: mysql
@@ -54,7 +58,13 @@ services:
     working_dir: /var/www/html
     depends_on:
       - php
-  redis-server:
-    image: redis
+  cache:
+    image: redis:alpine
+    restart: always
     ports:
       - "6379:6379"
+    volumes: 
+      - cache:/data
+volumes:
+  cache:
+    driver: local
