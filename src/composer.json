@@ -5,7 +5,8 @@
         "php": "^8.0",
         "vlucas/phpdotenv": "^5.5",
         "thingengineer/mysqli-database-class": "dev-master",
-        "predis/predis": "^2.2"
+        "predis/predis": "^2.2",
+        "palepurple/rate-limit": "^2.0"
     },
     "autoload": {
         "psr-4": {

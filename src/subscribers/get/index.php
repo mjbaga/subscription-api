@@ -5,6 +5,8 @@ require_once base_dir_path() . '/vendor/autoload.php';
 require_once base_dir_path() . '/app/db-connect.php';
 
 use SuscriberAPI\Models\Subscriber;
+use \PalePurple\RateLimit\RateLimit;
+use \PalePurple\RateLimit\Adapter\Predis as PredisAdapter;
 
 // Check id request parameter exists
 if(!isset($_REQUEST['id'])) {
@@ -22,6 +24,17 @@ $redis = new Predis\Client([
     'port'   => 6379,
 ]);
 
+$adapter = new PredisAdapter($redis);
+$rateLimiter = new RateLimit("get-subs", 1000, 60, $adapter); // 1000 requests per minute
+
+$clientIP = $_SERVER['REMOTE_ADDR'];
+
+// check if user with ip has exceeded request limit
+if (!$rateLimiter->check($id)) {
+    echo json_encode(['error' => 'You have exceeded the amount of requests.']);
+    return false;
+}
+
 // check if key exists in cache and return it
 if($redis->hgetall($key)) {
     echo json_encode($redis->hgetall($key));
@@ -31,7 +44,7 @@ if($redis->hgetall($key)) {
 $submodel = new Subscriber($db);
 $sub = $submodel->find($id);
 
-// Check for any users found in query
+// check for any users found in query
 if($sub) {
     $subredis = $sub;
     $subredis['cache'] = true; 
