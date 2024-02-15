@@ -2,22 +2,9 @@
 
 require_once './vendor/autoload.php';
 
-$host = $_ENV["MYSQL_HOST"];
-$db = $_ENV["MYSQL_DATABASE"];
-$user = $_ENV["MYSQL_USER"];
-$pw = $_ENV["MYSQL_PASSWORD"];
+$redis = new Redis();
+$redis->connect('redis-server', 6379);
 
-$db = new MysqliDb($host, $user, $pw, $db);
+echo "Connection to server successfully <br>";
 
-echo "test";
-
-$data = [
-    "name" => "Marvin Jayson",
-    "last_name" => "Baga",
-    "status" => "active"
-];
-
-$id = $db->insert('subscribers', $data);
-
-if($id)
-    echo 'user was created. Id=' . $id;
+echo "Server is running: " . $redis->ping() . "<br>";
