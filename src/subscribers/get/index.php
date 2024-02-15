@@ -10,8 +10,9 @@ use \PalePurple\RateLimit\Adapter\Predis as PredisAdapter;
 
 // Check id request parameter exists
 if(!isset($_REQUEST['id'])) {
+    header('HTTP/1.1 404 Not Found');
     echo json_encode(['error'=> 'Missing id parameter.']);
-    return false;
+    exit();
 }
 
 $id = $_REQUEST['id'];
@@ -25,20 +26,22 @@ $redis = new Predis\Client([
 ]);
 
 $adapter = new PredisAdapter($redis);
-$rateLimiter = new RateLimit("get-subs", 1000, 60, $adapter); // 1000 requests per minute
+$rateLimiter = new RateLimit("get-subs", 3, 60, $adapter); // 1000 requests per minute
 
 $clientIP = $_SERVER['REMOTE_ADDR'];
 
 // check if user with ip has exceeded request limit
 if (!$rateLimiter->check($id)) {
+    header('HTTP/1.1 429 Too many requests');
     echo json_encode(['error' => 'You have exceeded the amount of requests.']);
-    return false;
+    exit();
 }
 
 // check if key exists in cache and return it
 if($redis->hgetall($key)) {
+    header('HTTP/1.1 200 OK');
     echo json_encode($redis->hgetall($key));
-    return false;
+    exit();
 }
 
 $submodel = new Subscriber($db);
@@ -52,8 +55,12 @@ if($sub) {
     // cache results and set it to expire in an hour
     $redis->hmset($key, $subredis);
     $redis->expire($key, 3600);
+    header('HTTP/1.1 200 OK');
     echo json_encode($sub);
+    exit();
 } else {
-    echo json_encode(['error'=> 'No user found with id.']);
+    header('HTTP/1.1 404 Not Found');
+    echo json_encode(['error'=> 'Subcriber not found.']);
+    exit();
 }
 
