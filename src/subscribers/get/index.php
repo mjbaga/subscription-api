@@ -31,11 +31,8 @@ $sub = $submodel->find($id);
 
 // check for any users found in query
 if($sub) {
-    $subredis = $sub;
-    $subredis['cache'] = true; 
-    
     // cache results and set it to expire in an hour
-    $redis->hmset($key, $subredis);
+    $redis->hmset($key, $sub);
     $redis->expire($key, 3600);
     header('HTTP/1.1 200 OK');
     echo json_encode($sub);
