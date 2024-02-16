@@ -16,7 +16,7 @@ class Subscriber {
     /**
      * @param $id - $id of subscriber to find
      */
-    public function find($id)
+    public function find($id): null|array
     {
         $this->db->where("id", $id);
         $sub = $this->db->getOne("subscribers");
@@ -28,7 +28,7 @@ class Subscriber {
         return null;
     }
 
-    public function add(array $data)
+    public function add(array $data): array
     {
         $this->db->where("name", $data["name"]);
         $this->db->where("last_name", $data["last_name"]);
@@ -58,7 +58,7 @@ class Subscriber {
     }
 
     // very simple check to require all data fields
-    public function validateData($data)
+    public function validateData($data): bool
     {
         if(!isset($data["name"]) || !isset($data["last_name"]) || !isset($data["status"]))
             return false;

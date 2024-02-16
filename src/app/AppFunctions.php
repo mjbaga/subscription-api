@@ -7,7 +7,8 @@ use \PalePurple\RateLimit\Adapter\Predis as PredisAdapter;
 
 class AppFunctions {
 
-    public static function addRateLimiter(\Predis\Client $client, string $name, int $requestsPerHour = 1000) {
+    public static function addRateLimiter(\Predis\Client $client, string $name, int $requestsPerHour = 1000): void
+    {
 
         $adapter = new PredisAdapter($client);
 
