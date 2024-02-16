@@ -5,6 +5,12 @@ Vue.createApp({
             subscribers: [],
             page: 1,
             totalPages: null,
+            data: {
+                name: '',
+                lastName: '',
+                status: ''
+            },
+            formMessage: ''
         }
     },
     mounted() {
@@ -34,7 +40,38 @@ Vue.createApp({
                 this.page+=1;
                 this.getSubscribers();
             }
-        }
+        },
+        submitForm(){
+            var formData = {
+                name: this.data.name,
+                last_name: this.data.lastName,
+                status: this.data.status
+            };
 
+            this.postData("/subscribers/add/", formData)
+                .then((data) => {
+                    console.log(data);
+
+                    this.formMessage = data.message;
+
+                    this.data.name = '';
+                    this.data.lastName = '';
+                    this.data.status = 'active';
+                });
+
+        },
+        async postData(url, formData) {
+        
+            var response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+                
+            return response.json();
+
+        }
     }
 }).mount('#app')

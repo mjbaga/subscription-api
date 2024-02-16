@@ -50,6 +50,7 @@ services:
   composer:
     image: composer:latest
     container_name: composer
+    command: composer install
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
