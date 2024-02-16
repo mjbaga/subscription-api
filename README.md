@@ -1,7 +1,7 @@
 
 # Subscription API
 
-This codebase is for a test assignment and this is my implementation
+This codebase is for a test assignment and this is my implementation.
 
 ## What's inside
 - Docker wrapper for a PHP project with nginx, mysql, phpmyadmin, redis and composer.
