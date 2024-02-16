@@ -19,17 +19,7 @@ $redis = new Predis\Client([
 AppFunctions::addRateLimiter($redis, "get-list-" . $page);
 
 $submodel = new Subscriber($db);
-
-$db->pageLimit = 10;
-$subscribers = $db->arraybuilder()->paginate("subscribers", $page);
-
-$result = [
-    "per_page" => 10,
-    "totalPages" => $db->totalPages,
-    "total" => (int) $db->totalCount,
-    "current_page" => $page,
-    "data" => $subscribers,
-];
+$result = $submodel->getAll($page);
 
 header('HTTP/1.1 200 OK');
 echo json_encode($result);

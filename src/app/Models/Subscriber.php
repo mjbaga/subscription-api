@@ -14,6 +14,25 @@ class Subscriber {
     }
 
     /**
+     * @param $page - page of the request
+     */
+    public function getAll($page = 1): array
+    {
+        $this->db->pageLimit = 10;
+        $subscribers = $this->db->arraybuilder()->paginate("subscribers", $page);
+
+        $result = [
+            "per_page" => 10,
+            "totalPages" => $this->db->totalPages,
+            "total" => (int) $this->db->totalCount,
+            "current_page" => $page,
+            "data" => $subscribers,
+        ];
+
+        return $result;
+    }
+
+    /**
      * @param $id - $id of subscriber to find
      */
     public function find($id): null|array
