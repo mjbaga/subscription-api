@@ -61,7 +61,7 @@
                             Previous
                         </button>
                         <div>
-                            <span>Showing {{ page }} of {{ totalPages }}</span>
+                            <span>Showing {{ page }} of {{ totalPages }} pages</span>
                         </div>
                         <button class="btn" @click="getNextSubs" :disabled="page === totalPages">
                             Next
