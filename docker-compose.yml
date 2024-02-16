@@ -2,9 +2,6 @@ services:
   site:
     image: nginx:stable-alpine
     container_name: nginx
-    build:
-      context: .
-      dockerfile: redis.dockerfile
     ports:
       - "80:80"
     volumes:
@@ -63,7 +60,7 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    volumes: 
+    volumes:
       - cache:/data
 volumes:
   cache:
