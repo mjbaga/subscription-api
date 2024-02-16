@@ -22,7 +22,7 @@ Vue.createApp({
                 page: this.page
             });
 
-            fetch('/subscribers?' + params)
+            fetch('/subscribers/?' + params)
                 .then(r => r.json())
                 .then(json => {
                     this.subscribers = json.data;

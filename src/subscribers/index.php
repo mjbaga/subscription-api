@@ -5,10 +5,20 @@ require_once base_dir_path() . '/vendor/autoload.php';
 require_once base_dir_path() . '/app/db-connect.php';
 
 use SuscriberAPI\Models\Subscriber;
-
-$submodel = new Subscriber($db);
+use SuscriberAPI\AppFunctions;
 
 $page = isset( $_GET['page'] ) ? $_GET['page'] : 1 ;
+
+// create redis client for caching
+$redis = new Predis\Client([
+    'scheme' => 'tcp',
+    'host'   => 'cache',
+    'port'   => 6379,
+]);
+
+AppFunctions::addRateLimiter($redis, "get-list-" . $page);
+
+$submodel = new Subscriber($db);
 
 $db->pageLimit = 10;
 $subscribers = $db->arraybuilder()->paginate("subscribers", $page);
