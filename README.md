@@ -11,7 +11,9 @@ This codebase is for a test assignment and this is my implementation.
 After cloning this project, build the docker container by running command:
 > docker-compose up -d --build
 
-Subsequent runs just require
+Inside the src directory, please copy the .env.example and rename to a new .env file.
+
+Subsequent runs just require:
 > docker-compose up -d
 
 To stop docker:
