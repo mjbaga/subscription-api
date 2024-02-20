@@ -63,6 +63,13 @@ services:
       - "6379:6379"
     volumes:
       - cache:/data
+  npm:
+    image: node:18.19.1
+    container_name: npm
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
 volumes:
   cache:
     driver: local

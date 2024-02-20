@@ -12,5 +12,8 @@
         "psr-4": {
             "SuscriberAPI\\": "app"
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10"
     }
 }
