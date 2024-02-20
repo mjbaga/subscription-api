@@ -24,6 +24,11 @@ if(!isset($_REQUEST['id'])) {
 $id = $_REQUEST['id'];
 $key = "sub-" . $id;
 
+if($redis->hgetall($key)) {
+    echo json_encode($redis->hgetall($key));
+    exit();
+}
+
 AppFunctions::addRateLimiter($redis, "get-subs-" . $id);
 
 $submodel = new Subscriber($db);
